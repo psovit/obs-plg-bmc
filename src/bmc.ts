@@ -11,7 +11,7 @@ export interface CanvasNodeData {
 
 export interface CanvasData {
     nodes: CanvasNodeData[];
-    edges: any[];
+    edges: unknown[];
 }
 
 export function generateBmcData(): CanvasData {

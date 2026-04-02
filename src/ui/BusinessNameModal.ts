@@ -12,14 +12,14 @@ export class BusinessNameModal extends Modal {
 
     onOpen() {
         const { contentEl } = this;
-        contentEl.createEl("h2", { text: "Create Business Model Canvas" });
+        contentEl.createEl("h2", { text: "Create business model canvas" });
 
         new Setting(contentEl)
-            .setName("Business/Project Name")
+            .setName("Business name")
             .setDesc("Enter the name of your business. This will be used in the canvas file name.")
             .addText((text) =>
                 text
-                    .setPlaceholder("e.g., Acme Corp")
+                    .setPlaceholder("Enter a business name")
                     .onChange((value) => {
                         this.businessName = value;
                     })
@@ -28,7 +28,7 @@ export class BusinessNameModal extends Modal {
         new Setting(contentEl)
             .addButton((btn) =>
                 btn
-                    .setButtonText("Create Canvas")
+                    .setButtonText("Create canvas")
                     .setCta()
                     .onClick(() => {
                         this.close();

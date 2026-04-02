@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-strategist-toolkit",
 	"name": "Strategist Toolkit",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"minAppVersion": "1.4.0",
 	"description": "Generate a Business Model Canvas layout inside a new Obsidian Canvas file.",
 	"author": "Sovit Poudel - @psovit",
