@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
+	"name": "obsidian-strategist-toolkit",
 	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "Generate a Business Model Canvas layout inside a new Obsidian Canvas file.",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {

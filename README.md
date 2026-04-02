@@ -1,90 +1,81 @@
-# Obsidian Sample Plugin
+# Strategist Toolkit — Business Model Canvas for Obsidian
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+Generate a complete, color-coded Business Model Canvas (BMC) as an Obsidian Canvas file with one click or via the command palette.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+![Business Model Canvas](screenshot.png)
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open modal (simple)" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+If the image above does not render in your environment, the absolute path on this machine is:
+/Users/sovitp/Documents/psovit/projects/obs-plg-bmc/screenshot.png
 
-## First time developing plugins?
+## Features
 
-Quick starting guide for new plugin devs:
+- Command palette action: “Create Business Model Canvas”.
+- Ribbon button in the left sidebar to trigger the generator.
+- Modal prompt for a Business/Project name; used in the file name.
+- Creates the canvas in the same folder as the currently active file (or vault root if none).
+- Nine cards arranged in the classic BMC grid with non-overlapping coordinates.
+- Distinct colors for cards using Canvas color IDs.
+- Emoji-enhanced headings and prompting questions for each card.
+- Placeholder “[Type here…]” added to each card to guide editing.
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+## Commands and UI
 
-## Releasing new releases
+- Command: Create Business Model Canvas
+  - Opens a modal asking for the business name.
+  - Creates “<Business Name> - Business Model Canvas - YYYY-MM-DD.canvas”.
+  - Automatically opens the canvas after creation.
+- Ribbon icon: dashboard-style icon labeled “Create Business Model Canvas”.
+  - Click to launch the same generator flow as the command palette.
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+## Installation (Manual)
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+1. Build the plugin:
+   - `npm install`
+   - `npm run build`
+2. Copy the release files to your vault:
+   - From this repo root, copy `main.js` and `manifest.json` into:
+     `<YourVault>/.obsidian/plugins/obsidian-strategist-toolkit/`
+3. Reload Obsidian and enable the plugin in:
+   - Settings → Community plugins → Installed plugins.
 
-## Adding your plugin to the community plugin list
+## Development
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+- Scripts:
+  - `npm run dev` — watch mode (esbuild)
+  - `npm run build` — production build
+  - `npm run lint` — lint the project
 
-## How to use
+- Recommended workflow (symlink to your vault):
+  ```bash
+  ln -s "/Users/sovitp/Documents/psovit/projects/obs-plg-bmc" "<YourVault>/.obsidian/plugins/obsidian-strategist-toolkit"
+  ```
+  Then run `npm run dev` and reload the plugin in Obsidian to see changes.
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+## How It Works
 
-## Manually installing the plugin
+- Entry point: [main.ts](file:///Users/sovitp/Documents/psovit/projects/obs-plg-bmc/src/main.ts)
+  - Registers the command and adds the ribbon button.
+- Command logic: [create-bmc.ts](file:///Users/sovitp/Documents/psovit/projects/obs-plg-bmc/src/commands/create-bmc.ts)
+  - Prompts for business name and creates the `.canvas` file in the current folder.
+  - Handles file name conflicts and opens the canvas.
+- UI modal: [BusinessNameModal.ts](file:///Users/sovitp/Documents/psovit/projects/obs-plg-bmc/src/ui/BusinessNameModal.ts)
+  - Simple modal to collect the business name.
+- Layout generator: [bmc.ts](file:///Users/sovitp/Documents/psovit/projects/obs-plg-bmc/src/bmc.ts)
+  - Defines nine text nodes with coordinates, sizes, emoji titles, color IDs, and “[Type here…]” placeholders.
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+## Troubleshooting
 
-## Improve code quality with eslint
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- This project already has eslint preconfigured, you can invoke a check by running`npm run lint`
-- Together with a custom eslint [plugin](https://github.com/obsidianmd/eslint-plugin) for Obsidan specific code guidelines.
-- A GitHub action is preconfigured to automatically lint every commit on all branches.
+- Command not visible
+  - Ensure the plugin is enabled in Settings → Community plugins.
+- Canvas not created in expected folder
+  - The plugin uses the currently active file’s folder. Open a file in the desired folder before running the command.
+- Filename conflicts
+  - The plugin appends “(1)”, “(2)”, etc., if a file with the same name exists.
 
-## Funding URL
+## Minimum Requirements
 
-You can include funding URLs where people who use your plugin can financially support it.
+- Obsidian `minAppVersion`: 1.4.0 (see [manifest.json](file:///Users/sovitp/Documents/psovit/projects/obs-plg-bmc/manifest.json))
 
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
+## License
 
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
-```
-
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
-
-## API Documentation
-
-See https://docs.obsidian.md
+0BSD
